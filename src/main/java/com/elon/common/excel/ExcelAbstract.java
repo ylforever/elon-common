@@ -3,8 +3,10 @@ package com.elon.common.excel;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import com.sun.org.apache.xerces.internal.parsers.XMLParser;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.model.SharedStringsTable;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
@@ -59,11 +61,40 @@ public abstract class ExcelAbstract extends DefaultHandler {
         XMLReader parser = getSheetParser(sst);
 
         // 根据 rId# 或 rSheet# 查找sheet
-        InputStream sheet2 = r.getSheet("rId" + sheetNum);
-        InputSource sheetSource = new InputSource(sheet2);
+        InputStream sheet = r.getSheet("rId" + sheetNum);
+        InputSource sheetSource = new InputSource(sheet);
         parser.parse(sheetSource);
-        sheet2.close();
+        sheet.close();
         pkg.close();
+    }
+
+    /**
+     * 根据Sheet页名称读取Excel文件内容.
+     *
+     * @param filePath excel文件路径
+     * @param sheetName sheet页名称
+     * @throws Exception 处理异常
+     * @author elon
+     */
+    public void readOneSheetByName(String filePath, String sheetName) throws Exception {
+        OPCPackage opcPackage = OPCPackage.open(filePath);
+        XSSFReader reader = new XSSFReader(opcPackage);
+
+        SharedStringsTable sst = reader.getSharedStringsTable();
+        XMLReader parser = getSheetParser(sst);
+
+        XSSFReader.SheetIterator sheetIterator = (XSSFReader.SheetIterator)reader.getSheetsData();
+        for (; sheetIterator.hasNext(); ) {
+            InputStream sheet = sheetIterator.next();
+            String curSheetName = sheetIterator.getSheetName();
+            if (sheetName.equals(curSheetName)) {
+                InputSource sheetSource = new InputSource(sheet);
+                parser.parse(sheetSource);
+                sheet.close();
+                opcPackage.close();
+                return;
+            }
+        }
     }
 
     @Override
