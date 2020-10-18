@@ -5,7 +5,7 @@ import com.elon.common.excel.ExcelReaderUtil;
 import java.util.List;
 import java.util.Map;
 
-public class ProducerConsumerApplication {
+public class ElonCommonApplication {
     public static void main(String[] args) {
         ExcelReaderUtil excelReaderUtil = new ExcelReaderUtil();
 
@@ -19,6 +19,6 @@ public class ProducerConsumerApplication {
             e.printStackTrace();
         }
 
-        System.out.println("Startup ProducerConsumerApplication success.");
+        System.out.println("Startup ElonCommonApplication success.");
     }
 }
