@@ -1,5 +1,7 @@
 package com.elon.common.date;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,6 +46,7 @@ public class DateUtil {
 	 * @return yyyy-MM-dd HH:mm:ss格式的字符串
 	 */
 	public static String toUTCDateString(Date date) {
+		JSONObject.toJSONString("");
 		return utcDateFormatter.get().format(date);
 	}
 	
